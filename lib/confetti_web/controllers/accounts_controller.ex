@@ -20,43 +20,18 @@ defmodule ConfettiWeb.AccountController do
   """
   def callback(conn, %{"code" => code, "state" => state}) do
 
-    conn = verify_auth_state(conn, state)
+    # conn = verify_auth_state(conn, state)
 
     with {:ok, %{access_token: access_token}} <- Spotify.Auth.get_user_tokens(code),
          {:ok, %{product: "premium"} = user} <- Spotify.Users.get_current_user(access_token) do
            # save user session
            IO.inspect(user)
     else
-           {_, %{"error" => error}} when is_binary(error) -> redirect_to_app(conn, "/?error=#{error}")
+           {:error, error} when is_binary(error) -> redirect_to_app(conn, "/?error=#{error}")
     end
 
-    conn
-    # |> verify_auth_state(state)
-    |> (fn conn ->
-          # fetch tokens and verify premium user
-          with {:ok, %{access_token: access_token, refresh_token: _refresh_token}} <-
-                 Spotify.Auth.get_user_tokens(code),
-               {:ok, %{product: "premium"} = user} <- Spotify.Users.get_current_user(access_token) do
-            # save user's session
-            conn |> json(user)
-          else
-            {:error, %{"error" => error}} ->
-              conn |> redirect_to_app("/?error=#{error}")
-
-            {:ok, _user} ->
-              conn |> redirect_to_app("/?error=invalid_product")
-
-            {:error, error} ->
-              IO.inspect(error)
-              IO.inspect(conn)
-
-            _ ->
-              conn |> redirect_to_app("/?error=unknown_error")
-          end
-        end).()
-
     # redirect user
-    # |> redirect_to_app("dashboard")
+    redirect_to_app(conn, "dashboard")
   end
 
   defp verify_auth_state(conn, state) do

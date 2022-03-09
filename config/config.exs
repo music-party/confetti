@@ -50,7 +50,7 @@ config :confetti,
   spotify_client_id: "1cfd20a1ff284373b7561b98cfc87ac2",
   # spotify_client_secret: "<client_secret>",
   spotify_redirect_uri: "https://api.music-party.app/callback",
-  spotify_scope: [],
+  spotify_scope: ["user-read-private", "user-read-email"],
   spotify_show_dialog: false
 
 # Import environment specific config. This must remain at the bottom

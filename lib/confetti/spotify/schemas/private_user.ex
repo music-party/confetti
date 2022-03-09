@@ -23,10 +23,10 @@ defmodule Confetti.Spotify.Schemas.PrivateUser do
   def changeset(private_user, attrs \\ %{}) do
     private_user
     |> cast(attrs, [:country, :display_name, :email, :href, :id, :product, :type, :uri])
-    |> cast_embed(:explicit_content, &Schemas.ExplicitContent.changeset/2)
-    |> cast_embed(:external_urls, &Schemas.ExternalUrls.changeset/2)
-    |> cast_embed(:followers, &Schemas.Followers.changeset/2)
-    |> cast_embed(:images, &Schemas.Image.changeset/2)
+    |> cast_embed(:explicit_content, with: &Schemas.ExplicitContent.changeset/2)
+    |> cast_embed(:external_urls, with: &Schemas.ExternalUrls.changeset/2)
+    |> cast_embed(:followers, with: &Schemas.Followers.changeset/2)
+    |> cast_embed(:images, with: &Schemas.Image.changeset/2)
     |> validate_inclusion(:product, ["free", "open", "premium"])
     |> validate_inclusion(:type, ["user"])
   end

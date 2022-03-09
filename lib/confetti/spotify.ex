@@ -6,13 +6,22 @@ defmodule Confetti.Spotify do
   def scope, do: Application.get_env(:confetti, :spotify_scope) |> Enum.join(" ")
   def show_dialog, do: Application.get_env(:confetti, :spotify_show_dialog)
 
+  def handle_response({:ok, %Tesla.Env{} = env}) do
+    case env do
+      %{status: 204} -> :ok
+      %{status: status, body: body} when status in 200..299 -> {:ok, body}
+      %{body: %{"error" => %{"message" => error}}} -> {:error, error}
+      %{body: body} -> {:error, body}
+    end
+  end
+  def handle_response(error), do: error
+
   # Tesla client
-  def client(access_token) do
+  def client(token) do
     middleware = [
       {Tesla.Middleware.BaseUrl, "https://api.spotify.com/v1"},
-      Tesla.Middleware.JSON,
-      {Tesla.Middleware.BearerAuth, token: access_token},
-      Confetti.Spotify.Middleware.HandleResponse
+      {Tesla.Middleware.BearerAuth, token: token},
+      Tesla.Middleware.JSON
     ]
     adapter = {Tesla.Adapter.Hackney, [recv_timeout: 30_000]}
     Tesla.client(middleware, adapter)
