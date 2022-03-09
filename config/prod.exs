@@ -14,6 +14,10 @@ config :confetti, ConfettiWeb.Endpoint, cache_static_manifest: "priv/static/cach
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :confetti,
+  app_url: "https://music-party.app/",
+  api_url: "https://api.music-party.app/"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

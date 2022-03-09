@@ -46,11 +46,12 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Add Spotify configs
-config :spotify,
-  client_id: "1cfd20a1ff284373b7561b98cfc87ac2",
-  # client_secret: "<client_secret>",
-  redirect_uri: "",
-  scopes: []
+config :confetti,
+  spotify_client_id: "1cfd20a1ff284373b7561b98cfc87ac2",
+  # spotify_client_secret: "<client_secret>",
+  spotify_redirect_uri: "https://api.music-party.app/callback",
+  spotify_scope: [],
+  spotify_show_dialog: false
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

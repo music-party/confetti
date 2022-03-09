@@ -10,6 +10,7 @@ defmodule Confetti.Accounts.User do
     field :spotify_access_token, :string
     field :spotify_refresh_token, :string
     field :current_party, :binary_id
+    field :type, Ecto.Enum, values: [:user, :admin], default: :user
 
     timestamps()
     field :deleted_at, :utc_datetime_usec, default: nil

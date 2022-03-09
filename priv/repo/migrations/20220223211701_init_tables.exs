@@ -4,9 +4,9 @@ defmodule Confetti.Repo.Migrations.CreateUsers do
   def change do
     create table(:users, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :spotify_id, :string
-      add :spotify_access_token, :string
-      add :spotify_refresh_token, :string
+      add :spotify_id, :string, null: false
+      add :spotify_access_token, :string, null: false
+      add :spotify_refresh_token, :string, null: false
 
       timestamps(type: :utc_datetime_usec)
     end
@@ -15,38 +15,44 @@ defmodule Confetti.Repo.Migrations.CreateUsers do
 
     create table(:parties, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :name, :string
-      add :description, :string
-      add :privacy, :string
-      add :host_id, references(:users, on_delete: :nilify_all, type: :binary_id)
+      add :name, :string, null: false
+      add :description, :string, default: ""
+      add :privacy, :string, default: "private"
+      add :queue, :map
 
-      timestamps()
+      timestamps(type: :utc_datetime_usec)
+      add :deleted_at, :utc_datetime_usec, default: nil
     end
 
-    create index(:parties, [:host])
-
-    modify table(:users) do
+    alter table(:users) do
       add :current_party_id, references(:parties, on_delete: :nilify_all, type: :binary_id)
     end
 
-    create index(:users, [:current_party])
+    create index(:users, [:current_party_id])
 
-    create table(:tags, primary_key: false) do
-      add :id, :binary_id, primary_key: true
-      add :name, :string
-      add :weight, :float
-      add :party_id, references(:parties, on_delete: :nothing, type: :binary_id)
-
-      timestamps()
+    alter table(:parties) do
+      add :host_id, references(:users, on_delete: :nilify_all, type: :binary_id)
     end
 
-    create index(:tags, [:party])
+    create index(:parties, [:host_id])
+
+    create table(:tags, primary_key: false) do
+      # add :id, :binary_id, primary_key: true
+      add :party_id, references(:parties, type: :binary_id), primary_key: true
+      add :name, :string, primary_key: true
+      add :weight, :float
+
+      timestamps(type: :utc_datetime_usec)
+    end
 
     create table(:sessions, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :user_id, references(:users, on_delete: :delete_all, type: :binary_id)
-    end
 
-    create index
+      add :user_id, references(:users, on_delete: :delete_all, type: :binary_id),
+        primary_key: true
+
+      add :expires_in, :integer, null: false, default: 3600
+      timestamps(type: :utc_datetime_usec, inserted_at: :created_at, updated_at: false)
+    end
   end
 end

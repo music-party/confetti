@@ -58,3 +58,11 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :confetti,
+  spotify_redirect_uri: "http://localhost:4000/callback",
+  spotify_show_dialog: true
+
+config :confetti,
+  app_url: "http://localhost:3000/",
+  api_url: "http://localhost:4000/"
