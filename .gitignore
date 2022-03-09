@@ -25,3 +25,6 @@ confetti-*.tar
 # Ignore secrets files
 /config/*secrets.exs
 !/config/example.secrets.exs
+
+# misc
+.DS_Store
