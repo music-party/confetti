@@ -5,20 +5,6 @@ defmodule Confetti.AccountsFixtures do
   """
 
   @doc """
-  Generate a user.
-  """
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> Enum.into(%{
-        spotify_id: "some spotify_id"
-      })
-      |> Confetti.Accounts.create_user()
-
-    user
-  end
-
-  @doc """
   Generate a unique user spotify_id.
   """
   def unique_user_spotify_id, do: "some spotify_id#{System.unique_integer([:positive])}"
