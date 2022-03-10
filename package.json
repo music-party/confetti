@@ -1,0 +1,7 @@
+{
+  "name": "confetti",
+  "packageManager": "yarn@3.2.0",
+  "devDependencies": {
+    "typescript": "^4.6.2"
+  }
+}
