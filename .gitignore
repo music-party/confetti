@@ -1,11 +1,5 @@
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-!.yarn/cache
+# venv
+.venv
 
 # misc
-node_modules
 .DS_Store
