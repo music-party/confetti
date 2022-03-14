@@ -9,6 +9,24 @@ defmodule Confetti.Parties do
   alias Confetti.Parties.Party
 
   @doc """
+  Creates a party.
+
+  ## Examples
+
+      iex> create_party(%{field: value})
+      {:ok, %Party{}}
+
+      iex> create_party(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_party(attrs \\ %{}) do
+    %Party{}
+    |> Party.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Returns the list of parties.
 
   ## Examples
@@ -36,24 +54,6 @@ defmodule Confetti.Parties do
 
   """
   def get_party!(id), do: Repo.get!(Party, id)
-
-  @doc """
-  Creates a party.
-
-  ## Examples
-
-      iex> create_party(%{field: value})
-      {:ok, %Party{}}
-
-      iex> create_party(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_party(attrs \\ %{}) do
-    %Party{}
-    |> Party.changeset(attrs)
-    |> Repo.insert()
-  end
 
   @doc """
   Updates a party.

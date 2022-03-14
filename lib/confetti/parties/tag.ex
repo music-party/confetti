@@ -2,6 +2,9 @@ defmodule Confetti.Parties.Tag do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Confetti.Parties.Party
+
+  @required ~w(name weight)a
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   @timestamps_opts [type: :utc_datetime_usec]
@@ -15,9 +18,9 @@ defmodule Confetti.Parties.Tag do
   end
 
   @doc false
-  def changeset(tag, attrs) do
+  def changeset(tag, attrs \\ %{}) do
     tag
-    |> cast(attrs, [:name, :weight])
-    |> validate_required([:name, :weight])
+    |> cast(attrs, [] ++ @required)
+    |> validate_required(@required)
   end
 end

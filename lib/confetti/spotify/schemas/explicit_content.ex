@@ -7,6 +7,7 @@ defmodule Confetti.Spotify.Schemas.ExplicitContent do
     field :filter_locked, :boolean
   end
 
+  @doc false
   def changeset(explicit_content, attrs \\ %{}) do
     explicit_content
     |> cast(attrs, [:filter_enabled, :filter_locked])

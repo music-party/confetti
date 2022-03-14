@@ -3,10 +3,18 @@ defmodule ConfettiWeb.GraphQL do
   A module that keeps using definitions for graphql components.
   """
 
+  @doc """
+  When used, dispatch to the appropriate type/query/etc.
+  """
+  defmacro __using__(which) when is_atom(which) do
+    apply(__MODULE__, which, [])
+  end
+
   def type do
     quote do
       use Absinthe.Schema.Notation
       use Absinthe.Ecto, repo: Confetti.Repo
+      alias ConfettiWeb.Schema.Resolvers
     end
   end
 
@@ -26,12 +34,5 @@ defmodule ConfettiWeb.GraphQL do
     quote do
       alias Confetti.Repo
     end
-  end
-
-  @doc """
-  When used, dispatch to the appropriate type/query/etc.
-  """
-  defmacro __using__(which) when is_atom(which) do
-    apply(__MODULE__, which, [])
   end
 end
