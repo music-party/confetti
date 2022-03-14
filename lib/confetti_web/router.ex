@@ -5,6 +5,8 @@ defmodule ConfettiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  forward "/graphql", Absinthe.Plug, schema: ConfettiWeb.Schema
+
   scope "/", ConfettiWeb do
     pipe_through [:api, :fetch_session, :protect_from_forgery]
 

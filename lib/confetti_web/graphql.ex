@@ -13,17 +13,8 @@ defmodule ConfettiWeb.GraphQL do
   def type do
     quote do
       use Absinthe.Schema.Notation
-      use Absinthe.Ecto, repo: Confetti.Repo
-      alias ConfettiWeb.Schema.Resolvers
     end
   end
-
-  def query do
-    quote do
-      use Absinthe.Schema.Notation
-    end
-  end
-
   def schema do
     quote do
       use Absinthe.Schema

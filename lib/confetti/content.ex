@@ -6,7 +6,7 @@ defmodule Confetti.Parties do
   import Ecto.Query, warn: false
   alias Confetti.Repo
 
-  alias Confetti.Parties.Party
+  alias Confetti.Content.{Party, Tag}
 
   @doc """
   Creates a party.

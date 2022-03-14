@@ -4,16 +4,14 @@ defmodule Confetti.Accounts.User do
 
   alias Confetti.Parties.Party
 
-  @required ~w(spotify_id)a
+  @required ~w(spotify_id role)a
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   @timestamps_opts [type: :utc_datetime_usec]
   schema "users" do
     field :spotify_id, :string
-    field :spotify_access_token, :string
-    field :spotify_refresh_token, :string
     belongs_to :current_party, Party
-    field :type, Ecto.Enum, values: [:user, :admin], default: :user
+    field :role, Ecto.Enum, values: [:user, :admin], default: :user
 
     timestamps()
     field :deleted_at, :utc_datetime_usec, default: nil

@@ -1,4 +1,4 @@
-defmodule Confetti.Parties.Tag do
+defmodule Confetti.Content.Tag do
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,12 +1,22 @@
 defmodule ConfettiWeb.Schema do
-  use ConfettiWeb.GraphQL, :schema
+  use Absinthe.Schema
+  alias ConfettiWeb.Schema
 
-  # alias ConfettiWeb.SomeResolver
-
-  object :party do
-  end
+  # import_types Absinthe.Type.Custom # imports :datetime type
+  import_types Schema.AccountsTypes
+  import_types Schema.ContentTypes
 
   query do
-    # this is the query entry point to our app
+    # import_fields :accounts_queries
+    # import_fields :content_queries
+  end
+
+  mutation do
+    # import_fields :accounts_mutations
+    # import_fields :content_mutations
+  end
+
+  subscription do
+
   end
 end
