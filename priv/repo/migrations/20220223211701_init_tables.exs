@@ -2,57 +2,55 @@ defmodule Confetti.Repo.Migrations.InitTables do
   use Ecto.Migration
 
   def change do
-    create table(:users, primary_key: false) do
-      add :id, :binary_id, primary_key: true
-      add :spotify_id, :string, null: false
-      add :spotify_access_token, :string, null: false
-      add :spotify_refresh_token, :string, null: false
+    execute "CREATE EXTENSION IF NOT EXISTS citext"
 
+    create table("users", primary_key: false) do
+      add :id, :binary_id, primary_key: true
+      add :name :string, null: false
+      add :email, :citext, null: false
+      add :confirmed?, :boolean, null: false
+      add :admin?, :boolean, null: false, default: false
+      add :settings, :map, null: false
+      add :last_login, :utc_datetime_usec
       timestamps(type: :utc_datetime_usec)
     end
 
-    create unique_index(:users, [:spotify_id])
+    create table("identities", primary_key: false) do
+      add :country, :string, null: false
+      add :display_name, :string, null: false
+      add :email, :citext, null: false
+      add :explicit_content, :map, null: false
+      add :id, :string, primary_key: true
+      add :images, :map, null: false
+      add :product, :string, null: false
+      add :user_id, references("users", on_delete: :delete_all, on_update: :update_all, type: :binary_id), null: false
+      timestamps(type: :utc_datetime_usec)
+    end
 
-    create table(:parties, primary_key: false) do
+    create table("parties", primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :name, :string, null: false
       add :description, :string, default: ""
       add :privacy, :string, default: "private"
-      add :queue, :map
-
-      timestamps(type: :utc_datetime_usec)
-      add :deleted_at, :utc_datetime_usec, default: nil
-    end
-
-    alter table(:users) do
-      add :current_party_id, references(:parties, on_delete: :nilify_all, type: :binary_id)
-    end
-
-    create index(:users, [:current_party_id])
-
-    alter table(:parties) do
-      add :host_id, references(:users, on_delete: :nilify_all, type: :binary_id)
-    end
-
-    create index(:parties, [:host_id])
-
-    create table(:tags, primary_key: false) do
-      # add :id, :binary_id, primary_key: true
-      add :party_id, references(:parties, type: :binary_id), primary_key: true
-      add :name, :string, primary_key: true
-      add :weight, :float
-
+      add :queue, {:array, :map}, null: false, default: []
+      add :host_id, references("users", on_delete: :nilify_all, on_update: :update_all, type: :binary_id)
       timestamps(type: :utc_datetime_usec)
     end
 
-    create table(:sessions, primary_key: false) do
+    create table("tags", primary_key: false) do
       add :id, :binary_id, primary_key: true
-
-      add :user_id, references(:users, on_delete: :delete_all, type: :binary_id),
-        primary_key: true
-
-      add :expires_in, :integer, null: false, default: 3600
-      timestamps(type: :utc_datetime_usec, inserted_at: :created_at, updated_at: false)
+      add :name, :citext, null: false
+      add :weight, :float
+      add :party_id, references("parties", on_delete: :delete_all, on_update: :update_all, type: :binary_id)
     end
+
+    alter table("users") do
+      add :current_party_id, references("parties", on_delete: :nilify_all, type: :binary_id)
+    end
+
+    create unique_index("users", [:email])
+    create unique_index("identities", [:email])
+    create index("users", [:current_party_id])
+    create index("parties", [:host_id])
   end
 end

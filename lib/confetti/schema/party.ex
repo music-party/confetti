@@ -18,7 +18,7 @@ defmodule Confetti.Party do
       field :position, :integer
     end
 
-    def changeset(track \\ %__MODULE__{}, params \\ %{}) do
+    def changeset(track, params \\ %{}) do
       track
       |> cast(params, [:id, :position])
       |> validate_required([:id, :position])
@@ -39,7 +39,7 @@ defmodule Confetti.Party do
     timestamps()
   end
 
-  def changeset(party \\ %__MODULE__{}, params \\ %{}) do
+  def changeset(party, params \\ %{}) do
     party
     |> cast(params, [:name, :description, :privacy])
     |> validate_required([:name, :description, :privacy])

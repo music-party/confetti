@@ -4,6 +4,8 @@ defmodule Confetti.Tag do
   """
   use Confetti.Schema
 
+  alias Confetti.Party
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "tags" do
@@ -12,7 +14,7 @@ defmodule Confetti.Tag do
     belongs_to :party, Party
   end
 
-  def changeset(tag \\ %__MODULE__{}, params \\ %{}) do
+  def changeset(tag, params \\ %{}) do
     tag
     |> cast(params, [:name, :weight])
     |> validate_required([:name, :weight])

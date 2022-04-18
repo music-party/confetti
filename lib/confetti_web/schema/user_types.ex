@@ -5,6 +5,7 @@ defmodule ConfettiWeb.Schema.UserTypes do
   use Absinthe.Schema.Notation
 
   alias Confetti.User
+  alias ConfettiWeb.Resolvers
 
   # TYPES
 
@@ -29,7 +30,7 @@ defmodule ConfettiWeb.Schema.UserTypes do
   object :user_queries do
     field :user, :user do
       arg :id, non_null(:id)
-      resolve
+      resolve &Resolvers.User.get_by/3
     end
   end
 end
