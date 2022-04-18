@@ -8,7 +8,7 @@ defmodule Confetti.AccountsTest do
 
     import Confetti.AccountsFixtures
 
-    @invalid_attrs %{spotify_access_token: nil, spotify_id: nil, spotify_refresh_token: nil}
+    @invalid_params %{spotify_access_token: nil, spotify_id: nil, spotify_refresh_token: nil}
 
     test "list_users/0 returns all users" do
       user = user_fixture()
@@ -21,32 +21,32 @@ defmodule Confetti.AccountsTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{
+      valid_params = %{
         spotify_access_token: "some spotify_access_token",
         spotify_id: "some spotify_id",
         spotify_refresh_token: "some spotify_refresh_token"
       }
 
-      assert {:ok, %User{} = user} = Accounts.create_user(valid_attrs)
+      assert {:ok, %User{} = user} = Accounts.create_user(valid_params)
       assert user.spotify_access_token == "some spotify_access_token"
       assert user.spotify_id == "some spotify_id"
       assert user.spotify_refresh_token == "some spotify_refresh_token"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_params)
     end
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
 
-      update_attrs = %{
+      update_params = %{
         spotify_access_token: "some updated spotify_access_token",
         spotify_id: "some updated spotify_id",
         spotify_refresh_token: "some updated spotify_refresh_token"
       }
 
-      assert {:ok, %User{} = user} = Accounts.update_user(user, update_attrs)
+      assert {:ok, %User{} = user} = Accounts.update_user(user, update_params)
       assert user.spotify_access_token == "some updated spotify_access_token"
       assert user.spotify_id == "some updated spotify_id"
       assert user.spotify_refresh_token == "some updated spotify_refresh_token"
@@ -54,7 +54,7 @@ defmodule Confetti.AccountsTest do
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_params)
       assert user == Accounts.get_user!(user.id)
     end
 

@@ -8,8 +8,8 @@ defmodule Confetti.Spotify.Schemas.ExplicitContent do
   end
 
   @doc false
-  def changeset(explicit_content, attrs \\ %{}) do
+  def changeset(explicit_content, params \\ %{}) do
     explicit_content
-    |> cast(attrs, [:filter_enabled, :filter_locked])
+    |> cast(params, [:filter_enabled, :filter_locked])
   end
 end

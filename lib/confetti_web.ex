@@ -22,7 +22,6 @@ defmodule ConfettiWeb do
       use Phoenix.Controller, namespace: ConfettiWeb
 
       import Plug.Conn
-      import ConfettiWeb.Gettext
       alias ConfettiWeb.Router.Helpers, as: Routes
     end
   end
@@ -54,7 +53,6 @@ defmodule ConfettiWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import ConfettiWeb.Gettext
     end
   end
 
@@ -64,7 +62,6 @@ defmodule ConfettiWeb do
       import Phoenix.View
 
       import ConfettiWeb.ErrorHelpers
-      import ConfettiWeb.Gettext
       alias ConfettiWeb.Router.Helpers, as: Routes
     end
   end

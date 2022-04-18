@@ -11,9 +11,9 @@ defmodule Confetti.Spotify.Schemas.Artist do
   end
 
   @doc false
-  def changeset(artist, attrs \\ %{}) do
+  def changeset(artist, params \\ %{}) do
     artist
-    |> cast(attrs, [] ++ @required)
+    |> cast(params, [] ++ @required)
     |> validate_required(@required)
   end
 end

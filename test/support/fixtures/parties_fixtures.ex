@@ -7,9 +7,9 @@ defmodule Confetti.PartiesFixtures do
   @doc """
   Generate a party.
   """
-  def party_fixture(attrs \\ %{}) do
+  def party_fixture(params \\ %{}) do
     {:ok, party} =
-      attrs
+      params
       |> Enum.into(%{
         description: "some description",
         name: "some name",
@@ -23,9 +23,9 @@ defmodule Confetti.PartiesFixtures do
   @doc """
   Generate a tag.
   """
-  def tag_fixture(attrs \\ %{}) do
+  def tag_fixture(params \\ %{}) do
     {:ok, tag} =
-      attrs
+      params
       |> Enum.into(%{
         name: "some name",
         weight: 120.5

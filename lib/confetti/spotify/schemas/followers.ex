@@ -8,8 +8,8 @@ defmodule Confetti.Spotify.Schemas.Followers do
   end
 
   @doc false
-  def changeset(followers, attrs \\ %{}) do
+  def changeset(followers, params \\ %{}) do
     followers
-    |> cast(attrs, [:href, :total])
+    |> cast(params, [:href, :total])
   end
 end

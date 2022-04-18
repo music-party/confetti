@@ -19,15 +19,14 @@ defmodule ConfettiWeb.AccountController do
   4. save user's session and redirect
   """
   def callback(conn, %{"code" => code, "state" => state}) do
-
     # conn = verify_auth_state(conn, state)
 
-    with {:ok, %{access_token: access_token}} <- Spotify.Auth.get_user_tokens(code),
-         {:ok, %{product: "premium"} = user} <- Spotify.Users.get_current_user(access_token) do
-           # save user session
-           IO.inspect(user)
+    with {:ok, %{access_token: token}} <- Spotify.Auth.get_user_tokens(code),
+         {:ok, %{product: "premium"} = user} <- Spotify.Users.get_current_user(token) do
+      # save user session
+      IO.inspect(user)
     else
-           {:error, error} when is_binary(error) -> redirect_to_app(conn, "/?error=#{error}")
+      {:error, error} when is_binary(error) -> redirect_to_app(conn, "/?error=#{error}")
     end
 
     # redirect user

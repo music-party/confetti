@@ -18,9 +18,9 @@ defmodule Confetti.Spotify.Schemas.Track do
   end
 
   @required ~w(duration_ms explicit id index name uri)a
-  def changeset(track, attrs \\ %{}) do
+  def changeset(track, params \\ %{}) do
     track
-    |> cast(attrs, [:available_markets] ++ @required)
+    |> cast(params, [:available_markets] ++ @required)
     |> cast_embed(:album, with: &Spotify.Album.changeset/2)
     |> cast_embed(:artist, with: &Spotify.Artist.changeset/2)
     |> validate_required(@required)

@@ -15,6 +15,7 @@ defmodule ConfettiWeb.GraphQL do
       use Absinthe.Schema.Notation
     end
   end
+
   def schema do
     quote do
       use Absinthe.Schema

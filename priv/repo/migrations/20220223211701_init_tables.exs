@@ -1,4 +1,4 @@
-defmodule Confetti.Repo.Migrations.CreateUsers do
+defmodule Confetti.Repo.Migrations.InitTables do
   use Ecto.Migration
 
   def change do

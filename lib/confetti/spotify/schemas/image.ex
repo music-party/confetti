@@ -10,9 +10,9 @@ defmodule Confetti.Spotify.Schemas.Image do
   end
 
   @doc false
-  def changeset(image, attrs \\ %{}) do
+  def changeset(image, params \\ %{}) do
     image
-    |> cast(attrs, [:height, :width] ++ @required)
+    |> cast(params, [:height, :width] ++ @required)
     |> validate_required(@required)
   end
 end

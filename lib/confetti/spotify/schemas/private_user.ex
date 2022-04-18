@@ -22,9 +22,9 @@ defmodule Confetti.Spotify.Schemas.PrivateUser do
   end
 
   @doc false
-  def changeset(private_user, attrs \\ %{}) do
+  def changeset(private_user, params \\ %{}) do
     private_user
-    |> cast(attrs, [:display_name, :href, :uri] ++ @required)
+    |> cast(params, [:display_name, :href, :uri] ++ @required)
     |> cast_embed(:explicit_content, with: &Spotify.ExplicitContent.changeset/2)
     |> cast_embed(:external_urls, with: &Spotify.ExternalUrls.changeset/2)
     |> cast_embed(:followers, with: &Spotify.Followers.changeset/2)

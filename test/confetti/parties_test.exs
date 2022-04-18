@@ -8,7 +8,7 @@ defmodule Confetti.PartiesTest do
 
     import Confetti.PartiesFixtures
 
-    @invalid_attrs %{description: nil, name: nil, privacy: nil}
+    @invalid_params %{description: nil, name: nil, privacy: nil}
 
     test "list_parties/0 returns all parties" do
       party = party_fixture()
@@ -21,28 +21,28 @@ defmodule Confetti.PartiesTest do
     end
 
     test "create_party/1 with valid data creates a party" do
-      valid_attrs = %{description: "some description", name: "some name", privacy: :public}
+      valid_params = %{description: "some description", name: "some name", privacy: :public}
 
-      assert {:ok, %Party{} = party} = Parties.create_party(valid_attrs)
+      assert {:ok, %Party{} = party} = Parties.create_party(valid_params)
       assert party.description == "some description"
       assert party.name == "some name"
       assert party.privacy == :public
     end
 
     test "create_party/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Parties.create_party(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Parties.create_party(@invalid_params)
     end
 
     test "update_party/2 with valid data updates the party" do
       party = party_fixture()
 
-      update_attrs = %{
+      update_params = %{
         description: "some updated description",
         name: "some updated name",
         privacy: :private
       }
 
-      assert {:ok, %Party{} = party} = Parties.update_party(party, update_attrs)
+      assert {:ok, %Party{} = party} = Parties.update_party(party, update_params)
       assert party.description == "some updated description"
       assert party.name == "some updated name"
       assert party.privacy == :private
@@ -50,7 +50,7 @@ defmodule Confetti.PartiesTest do
 
     test "update_party/2 with invalid data returns error changeset" do
       party = party_fixture()
-      assert {:error, %Ecto.Changeset{}} = Parties.update_party(party, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Parties.update_party(party, @invalid_params)
       assert party == Parties.get_party!(party.id)
     end
 
@@ -71,7 +71,7 @@ defmodule Confetti.PartiesTest do
 
     import Confetti.PartiesFixtures
 
-    @invalid_attrs %{name: nil, weight: nil}
+    @invalid_params %{name: nil, weight: nil}
 
     test "list_tags/0 returns all tags" do
       tag = tag_fixture()
@@ -84,29 +84,29 @@ defmodule Confetti.PartiesTest do
     end
 
     test "create_tag/1 with valid data creates a tag" do
-      valid_attrs = %{name: "some name", weight: 120.5}
+      valid_params = %{name: "some name", weight: 120.5}
 
-      assert {:ok, %Tag{} = tag} = Parties.create_tag(valid_attrs)
+      assert {:ok, %Tag{} = tag} = Parties.create_tag(valid_params)
       assert tag.name == "some name"
       assert tag.weight == 120.5
     end
 
     test "create_tag/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Parties.create_tag(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Parties.create_tag(@invalid_params)
     end
 
     test "update_tag/2 with valid data updates the tag" do
       tag = tag_fixture()
-      update_attrs = %{name: "some updated name", weight: 456.7}
+      update_params = %{name: "some updated name", weight: 456.7}
 
-      assert {:ok, %Tag{} = tag} = Parties.update_tag(tag, update_attrs)
+      assert {:ok, %Tag{} = tag} = Parties.update_tag(tag, update_params)
       assert tag.name == "some updated name"
       assert tag.weight == 456.7
     end
 
     test "update_tag/2 with invalid data returns error changeset" do
       tag = tag_fixture()
-      assert {:error, %Ecto.Changeset{}} = Parties.update_tag(tag, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Parties.update_tag(tag, @invalid_params)
       assert tag == Parties.get_tag!(tag.id)
     end
 

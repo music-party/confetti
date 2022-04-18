@@ -12,9 +12,9 @@ defmodule Confetti.AccountsFixtures do
   @doc """
   Generate a user.
   """
-  def user_fixture(attrs \\ %{}) do
+  def user_fixture(params \\ %{}) do
     {:ok, user} =
-      attrs
+      params
       |> Enum.into(%{
         spotify_access_token: "some spotify_access_token",
         spotify_id: unique_user_spotify_id(),

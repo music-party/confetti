@@ -6,6 +6,11 @@ defmodule ConfettiWeb.Router do
   end
 
   forward "/graphql", Absinthe.Plug, schema: ConfettiWeb.Schema
+  if Mix.env() == :dev do
+    forward "/graphql-playground", Absinthe.Plug.GraphiQL,
+      schema: ConfettiWeb.Schema,
+      interface: :playground
+  end
 
   scope "/", ConfettiWeb do
     pipe_through [:api, :fetch_session, :protect_from_forgery]

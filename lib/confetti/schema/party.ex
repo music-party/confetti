@@ -1,0 +1,48 @@
+defmodule Confetti.Party do
+  @moduledoc """
+  Party Schema
+  """
+  use Confetti.Schema
+
+  alias Confetti.{Message, Tag, User}
+
+  defmodule Track do
+    @moduledoc """
+    Party Track Schema
+    """
+    use Confetti.Schema
+
+    @primary_key false
+    embedded_schema do
+      field :id, :string, primary_key: true
+      field :position, :integer
+    end
+
+    def changeset(track \\ %__MODULE__{}, params \\ %{}) do
+      track
+      |> cast(params, [:id, :position])
+      |> validate_required([:id, :position])
+    end
+  end
+
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
+  @timestamps_opts [type: :utc_datetime_usec]
+  schema "parties" do
+    field :name, :string
+    field :description, :string, default: ""
+    field :privacy, Ecto.Enum, values: [:public, :private], default: :private
+    belongs_to :host, User
+    embeds_many :queue, Track
+    has_many :tags, Tag
+    has_many :messages, Message
+    timestamps()
+  end
+
+  def changeset(party \\ %__MODULE__{}, params \\ %{}) do
+    party
+    |> cast(params, [:name, :description, :privacy])
+    |> validate_required([:name, :description, :privacy])
+    |> cast_assoc(:host, required: true)
+  end
+end

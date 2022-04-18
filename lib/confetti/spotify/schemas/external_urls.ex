@@ -7,8 +7,8 @@ defmodule Confetti.Spotify.Schemas.ExternalUrls do
   end
 
   @doc false
-  def changeset(external_urls, attrs \\ %{}) do
+  def changeset(external_urls, params \\ %{}) do
     external_urls
-    |> cast(attrs, [:spotify])
+    |> cast(params, [:spotify])
   end
 end

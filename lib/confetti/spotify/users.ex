@@ -1,14 +1,16 @@
 defmodule Confetti.Spotify.Users do
-  import Confetti.Spotify
+  import Confetti.Spotify.Client
   alias Confetti.Spotify.Schemas.{PrivateUser}
 
+  @doc """
+  Get detailed profile information about the current user (including the current user's username).
+  """
   def get_current_user(token) do
-    with {:ok, user} <- Tesla.get(client(token), "/me"),
-         %Ecto.Changeset{valid?: true} = cs <- PrivateUser.changeset(%PrivateUser{}, user) do
-      {:ok, Ecto.Changeset.apply_changes(cs)}
-    else
-      {:error, res} -> {:error, res}
-      %Ecto.Changeset{valid?: false} -> {:error, "API data does not match changeset"}
-    end
+    get(token, "/me")
+    |> handle_response(PrivateUser)
+  end
+
+  def get_user(_token, _id) do
+    :not_implemented
   end
 end

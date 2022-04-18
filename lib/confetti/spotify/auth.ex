@@ -4,11 +4,10 @@ defmodule Confetti.Spotify.Auth do
 
   This module operates independently from the rest of the Spotify context.
   """
-  alias Confetti.Spotify
+  import Confetti.Spotify.Config
 
   @base_url "https://accounts.spotify.com"
 
-  @spec url :: String.t()
   @doc """
   Creates the url for the Authorization Code Flow
   """
@@ -16,44 +15,31 @@ defmodule Confetti.Spotify.Auth do
     @base_url <>
       "/authorize?" <>
       URI.encode_query(%{
-        client_id: Spotify.client_id(),
-        redirect_uri: Spotify.redirect_uri(),
+        client_id: client_id(),
+        redirect_uri: redirect_uri(),
         response_type: "code",
-        scope: Spotify.scope(),
-        show_dialog: Spotify.show_dialog(),
+        scope: scope(),
+        show_dialog: show_dialog(),
         state: generate_random_string(16)
       })
   end
 
-
   def get_user_tokens(code) do
-    data = Tesla.post(
-             client(),
-             "/api/token",
-             %{code: code, grant_type: "authorization_code", redirect_uri: Spotify.redirect_uri()}
-           )
-           |> handle_response()
-
-    case data do
-      {:ok, %{"access_token" => _, "refresh_token" => _} = tokens} -> {:ok, tokens}
-      {:error, %{"error" => %{"message" => error}}} -> {:error, error}
-      {:error, %{"error" => error}} when is_binary(error) -> {:error, error}
-      {_, env} ->
-        IO.inspect(env)
-        {:error, "unknown_error"}
+    with {:ok,
+          %{
+            status: 200,
+            body: %{"access_token" => at, "refresh_token" => rt}
+          }} <-
+           Tesla.post(client(), "/api/token", %{
+             code: code,
+             grant_type: "authorization_code",
+             redirect_uri: redirect_uri()
+           }) do
+      {:ok, %{access_token: at, refresh_token: rt}}
+    else
+      {:ok, %{body: %{"error" => error}}} -> {:error, error}
+      _ -> {:error, "unknown_error"}
     end
-  end
-
-  defp client() do
-    middleware = [
-      {Tesla.Middleware.BaseUrl, @base_url},
-      Tesla.Middleware.FormUrlencoded,
-      Tesla.Middleware.DecodeJson,
-      {Tesla.Middleware.BasicAuth, username: Spotify.client_id(), password: Spotify.client_secret()}
-    ]
-
-    adapter = {Tesla.Adapter.Hackney, [recv_timeout: 30_000]}
-    Tesla.client(middleware, adapter)
   end
 
   defp handle_response({:ok, %Tesla.Env{} = env}) do
@@ -61,6 +47,18 @@ defmodule Confetti.Spotify.Auth do
       %{status: status, body: body} when status in 200..299 -> {:ok, body}
       %{body: body} -> {:error, body}
     end
+  end
+
+  defp client() do
+    Tesla.client(
+      [
+        {Tesla.Middleware.BaseUrl, @base_url},
+        Tesla.Middleware.FormUrlencoded,
+        Tesla.Middleware.DecodeJson,
+        {Tesla.Middleware.BasicAuth, username: client_id(), password: client_secret()}
+      ],
+      {Tesla.Adapter.Hackney, [recv_timeout: 30_000]}
+    )
   end
 
   defp generate_random_string(length) do
