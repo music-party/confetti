@@ -42,6 +42,7 @@ defmodule Confetti.User do
   def changeset(user, params \\ %{}) do
     user
     |> cast(params, [:name, :email, :confirmed?, :admin?, :last_login])
+    |> validate_required([:name, :email, :confirmed?, :admin?, :last_login])
   end
 
   def get(id), do: Repo.get(__MODULE__, id)

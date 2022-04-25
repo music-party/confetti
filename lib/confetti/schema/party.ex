@@ -33,6 +33,7 @@ defmodule Confetti.Party do
     field :description, :string, default: ""
     field :privacy, Ecto.Enum, values: [:public, :private], default: :private
     belongs_to :host, User
+    has_many :listeners, User, foreign_key: :current_party_id
     embeds_many :queue, Track
     has_many :tags, Tag
     has_many :messages, Message
