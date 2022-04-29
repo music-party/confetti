@@ -33,6 +33,7 @@ defmodule Confetti.Repo.Migrations.InitTables do
       add :description, :string, default: ""
       add :privacy, :string, default: "private"
       add :queue, {:array, :map}, null: false, default: []
+      add :history, {:array, :string}, null: false, default: []
       add :host_id, references("users", on_delete: :nilify_all, on_update: :update_all, type: :binary_id)
       timestamps(type: :utc_datetime_usec)
     end

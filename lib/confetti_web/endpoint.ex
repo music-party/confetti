@@ -1,4 +1,14 @@
 defmodule ConfettiWeb.Endpoint do
+  @moduledoc """
+  Phoenix Endpoint
+
+  Boundary where all requests start and interface to the underlying web servers.
+
+  - provides a wrapper for starting and stopping the endpoint as part of a
+  supervision tree
+  - defines an initial plug pipeline for requests to pass through
+  - hosts web specific configuration for your application
+  """
   use Phoenix.Endpoint, otp_app: :confetti
 
   # The session will be stored in the cookie and signed,

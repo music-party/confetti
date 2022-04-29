@@ -1,35 +1,39 @@
 defmodule ConfettiWeb.Router do
+  @moduledoc """
+  Phoenix Router
+  """
   use ConfettiWeb, :router
+
+  import Phoenix.LiveDashboard.Router
+
+  alias ConfettiWeb.Plug
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug :fetch_session
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug Plug.Authenticate, repo: Confetti.Repo
+  end
+
+  scope "/auth", ConfettiWeb do
+    pipe_through :auth
+    get "/spotify", AuthController, :request, as: "spotify_auth"
+    get "/spotify/callback", AuthController, :callback, as: "spotify_auth"
+    get "/log-out", AuthController, :delete, as: "log_out"
+  end
+
+  live_dashboard "/dashboard", metrics: ConfettiWeb.Telemetry
+
   forward "/graphql", Absinthe.Plug, schema: ConfettiWeb.Schema
+
   if Mix.env() == :dev do
     forward "/graphql-playground", Absinthe.Plug.GraphiQL,
       schema: ConfettiWeb.Schema,
       interface: :playground
-  end
-
-  scope "/", ConfettiWeb do
-    pipe_through [:api, :fetch_session, :protect_from_forgery]
-
-    get "/login", AccountController, :login
-    get "/callback", AccountController, :callback
-
-    # Enables LiveDashboard only for development
-    #
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
-    if Mix.env() in [:dev, :test] do
-      import Phoenix.LiveDashboard.Router
-
-      live_dashboard "/dashboard", metrics: ConfettiWeb.Telemetry
-    end
   end
 
   # Enables the Swoosh mailbox preview in development.

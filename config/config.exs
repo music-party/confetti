@@ -15,9 +15,6 @@ config :confetti, :generators, binary_id: true
 # Set environment
 config :confetti, env: Mix.env()
 
-# Import secrets
-import_config "secrets.exs"
-
 # Configures the endpoint
 config :confetti, ConfettiWeb.Endpoint,
   url: [host: "localhost"],
@@ -45,17 +42,18 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Add Spotify configs
-config :confetti,
-  spotify_client_id: "1cfd20a1ff284373b7561b98cfc87ac2",
-  # spotify_client_secret: "<client_secret>",
-  spotify_redirect_uri: "https://api.music-party.app/callback",
-  spotify_scope: ["user-read-private", "user-read-email"],
-  spotify_show_dialog: false
+config :ueberauth, Ueberauth,
+  providers: [
+    spotify: {Ueberauth.Strategy.Spotify, [default_scope: "user-read-email user-read-private"]},
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Spotify.OAuth,
+  client_id: System.get_env("SPOTIFY_CLIENT_ID"),
+  client_secret: System.get_env("SPOTIFY_CLIENT_SECRET"),
+  redirect_uri: System.get_env("SPOTIFY_REDIRECT_URI")
+
+config :oauth2, debug: config_env() in [:dev, :test]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
-
-# Import environment specific secrets
-# import_config "#{config_env()}.secrets.exs"

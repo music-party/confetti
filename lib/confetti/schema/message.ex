@@ -4,7 +4,8 @@ defmodule Confetti.Message do
   """
   use Confetti.Schema
 
-  alias Confetti.{Party, User}
+  alias Confetti.Party
+  alias Confetti.User
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

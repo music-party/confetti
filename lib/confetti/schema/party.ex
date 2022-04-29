@@ -4,7 +4,9 @@ defmodule Confetti.Party do
   """
   use Confetti.Schema
 
-  alias Confetti.{Message, Tag, User}
+  alias Confetti.Message
+  alias Confetti.Tag
+  alias Confetti.User
 
   defmodule Track do
     @moduledoc """
@@ -35,6 +37,7 @@ defmodule Confetti.Party do
     belongs_to :host, User
     has_many :listeners, User, foreign_key: :current_party_id
     embeds_many :queue, Track
+    field :history, {:array, :string}
     has_many :tags, Tag
     has_many :messages, Message
     timestamps()
@@ -46,4 +49,6 @@ defmodule Confetti.Party do
     |> validate_required([:name, :description, :privacy])
     |> cast_assoc(:host, required: true)
   end
+
+  def get(id), do: Repo.get(__MODULE__, id)
 end

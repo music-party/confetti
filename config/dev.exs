@@ -60,9 +60,7 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :confetti,
-  spotify_redirect_uri: "http://localhost:4000/callback",
-  spotify_show_dialog: true
-
-config :confetti,
   app_url: "http://localhost:3000/",
   api_url: "http://localhost:4000/"
+
+import_config "dev.secret.exs"

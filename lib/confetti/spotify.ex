@@ -2,7 +2,8 @@ defmodule Confetti.Spotify do
   @moduledoc """
   A context for the Spotify Web API
   """
-  alias Confetti.Spotify.{Tracks, Users}
+  alias Confetti.Spotify.Tracks
+  alias Confetti.Spotify.Users
 
   # ALBUMS
   # ARTISTS

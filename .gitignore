@@ -23,8 +23,8 @@ erl_crash.dump
 confetti-*.tar
 
 # Ignore secrets files
-/config/*secrets.exs
-!/config/example.secrets.exs
+/config/*secret.exs
+!/config/example.secret.exs
 
 # misc
 .DS_Store

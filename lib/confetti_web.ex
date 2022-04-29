@@ -23,6 +23,8 @@ defmodule ConfettiWeb do
 
       import Plug.Conn
       alias ConfettiWeb.Router.Helpers, as: Routes
+
+      require Logger
     end
   end
 

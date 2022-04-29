@@ -4,7 +4,8 @@ defmodule Confetti.User do
   """
   use Confetti.Schema
 
-  alias Confetti.{Identity, Party}
+  alias Confetti.Identity
+  alias Confetti.Party
 
   defmodule Settings do
     @moduledoc """
@@ -46,4 +47,12 @@ defmodule Confetti.User do
   end
 
   def get(id), do: Repo.get(__MODULE__, id)
+
+  def find_or_create(%Ueberauth.Auth{} = auth) do
+    if identity = Repo.get(Identity, auth.uid) do
+      {:ok, identity.user}
+    else
+      :not_implemented
+    end
+  end
 end

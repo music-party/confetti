@@ -4,10 +4,7 @@ defmodule ConfettiWeb.Schema.UserTypes do
   """
   use Absinthe.Schema.Notation
 
-  alias Confetti.User
   alias ConfettiWeb.Resolvers
-
-  # TYPES
 
   object :user do
     field :id, non_null(:id)
@@ -24,8 +21,6 @@ defmodule ConfettiWeb.Schema.UserTypes do
     field :subscribe_to_dev_updates, non_null(:boolean)
     field :subscribe_to_newsletter, non_null(:boolean)
   end
-
-  # QUERIES
 
   object :user_queries do
     field :user, :user do

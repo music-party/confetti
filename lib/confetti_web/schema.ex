@@ -11,14 +11,8 @@ defmodule ConfettiWeb.Schema do
   import_types(Schema.PartyTypes)
 
   query do
-    # import_fields(:user_queries)
-    # import_fields(:party_queries)
-    field :user, :user do
-      arg :id, non_null(:id)
-      resolve fn %{id: user_id}, _ ->
-        {:ok, %{id: user_id}}
-      end
-    end
+    import_fields(:user_queries)
+    import_fields(:party_queries)
   end
 
   # mutation do
