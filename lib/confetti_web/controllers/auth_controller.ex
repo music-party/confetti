@@ -6,29 +6,23 @@ defmodule ConfettiWeb.AuthController do
 
   plug Ueberauth
 
-  def request(_conn, _params), do: :not_implemented
-
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case User.find_or_create(auth) do
       {:ok, user} ->
-        Logger.info("User authentication succeeded:\n\t#{auth.uid}", ansi_color: :green)
-        :not_implemented
+        Logger.info("User authentication success:\n\t#{auth.uid}", ansi_color: :green)
+        conn |> log_in(user)
       {:error, _error} ->
-        :not_implemented
+        Logger.info("User authentication succeeded:\n\t#{auth.uid}", ansi_color: :green)
+        conn |> redirect(to: "/?error=authentication_error")
     end
-
-    redirect(conn, to: "/?success")
   end
 
   def callback(%{assigns: %{ueberauth_failure: fails}} = conn, _params) do
     Logger.info("User authentication failure:\n\t#{fails}", ansi_color: :red)
-    conn
-    |> redirect(to: "/?callback=error")
+    conn |> redirect(to: "/?callback=error")
   end
 
-  def delete(conn, _params) do
-    conn |> log_out()
-  end
+  def delete(conn, _params), do: log_out(conn)
 
   defp log_in(conn, user) do
     conn
