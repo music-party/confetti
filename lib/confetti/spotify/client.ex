@@ -7,7 +7,8 @@ defmodule Confetti.Spotify.Client do
   def delete(token, url, opts \\ []), do: fetch(token, :delete, url, opts)
 
   def handle_response(data, module) do
-    with %{valid?: true} = cs <- apply(module, :changeset, [struct(module), data]) do
+    # with %{valid?: true} = cs <- apply(module, :changeset, [struct(module), data]) do
+    with %{valid?: true} = cs <- module.changeset(struct(module), data) do
       {:ok, Ecto.Changeset.apply_changes(cs)}
     else
       _ -> :error

@@ -2,10 +2,6 @@ defmodule ConfettiWeb.GraphQL do
   @moduledoc """
   A module that keeps using definitions for graphql components.
   """
-
-  @doc """
-  When used, dispatch to the appropriate type/query/etc.
-  """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end

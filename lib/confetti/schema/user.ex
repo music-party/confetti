@@ -15,6 +15,7 @@ defmodule Confetti.User do
 
     @primary_key false
     embedded_schema do
+      field :show_hints, :boolean, default: true
       field :subscribe_to_dev_updates, :boolean, default: true
       field :subscribe_to_newsletter, :boolean, default: true
     end
@@ -43,16 +44,31 @@ defmodule Confetti.User do
   def changeset(user, params \\ %{}) do
     user
     |> cast(params, [:name, :email, :confirmed?, :admin?, :last_login])
+    |> cast_assoc(:identity, required: true, with: &Identity.changeset/2)
+    |> cast_embed(:settings, required: true, with: &Settings.changeset/2)
     |> validate_required([:name, :email, :confirmed?, :admin?, :last_login])
   end
 
   def get(id), do: Repo.get(__MODULE__, id)
 
+  def get_by_spotify_id(id) do
+    Repo.one(
+      from u in __MODULE__,
+        join: i in assoc(u, :identity),
+        where: i.id == ^id
+    )
+  end
+
   def find_or_create(%Ueberauth.Auth{} = auth) do
-    if identity = Repo.get(Identity, auth.uid) do
-      {:ok, identity.user}
+    if user = get_by_spotify_id(auth.uid) do
+      {:ok, user}
     else
-      :not_implemented
+      %__MODULE__{last_login: DateTime.utc_now(), settings: %{}}
+      |> changeset(
+          Map.from_struct(auth.info)
+          |> Map.merge(%{identity: auth.extra.raw_info.user})
+        )
+      |> Repo.insert()
     end
   end
 end

@@ -30,9 +30,23 @@ defmodule Confetti.Identity do
     timestamps()
   end
 
-  def changeset(params) do
-    %__MODULE__{}
-    |> cast(params, [:country, :display_name, :email, :product])
+  def changeset(identity, params \\ %{}) do
+    identity
+    |> cast(params, [:country, :display_name, :email, :id, :product])
+    |> cast_embed(:explicit_content, required: true, with: &explicit_content_changeset/2)
+    |> cast_embed(:images, required: true, with: &image_changeset/2)
     |> validate_required([:country, :display_name, :email, :product])
+  end
+
+  def explicit_content_changeset(explicit_content, params \\ %{}) do
+    explicit_content
+    |> cast(params, [:filter_enabled, :filter_locked])
+    |> validate_required([:filter_enabled])
+  end
+
+  def image_changeset(image, params \\ %{}) do
+    image
+    |> cast(params, [:height, :url, :width])
+    |> validate_required([:url])
   end
 end

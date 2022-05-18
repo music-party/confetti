@@ -96,7 +96,8 @@ defmodule Ueberauth.Strategy.Spotify do
       |> with_redirect_uri(conn)
 
     module = option(conn, :oauth2_module)
-    redirect!(conn, apply(module, :authorize_url!, [params]))
+    # redirect!(conn, apply(module, :authorize_url!, [params]))
+    redirect!(conn, module.authorize_url!(params))
   end
 
   @doc """
@@ -109,7 +110,8 @@ defmodule Ueberauth.Strategy.Spotify do
   @impl Ueberauth.Strategy
   def handle_callback!(%Plug.Conn{params: %{"code" => code}} = conn) do
     module = option(conn, :oauth2_module)
-    token = apply(module, :get_token!, [[code: code]])
+    # token = apply(module, :get_token!, [[code: code]])
+    token = module.get_token!(code: code)
 
     if token.access_token == nil do
       set_errors!(conn, [

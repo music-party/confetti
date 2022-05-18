@@ -6,7 +6,7 @@ defmodule Confetti.Repo.Migrations.InitTables do
 
     create table("users", primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :name :string, null: false
+      add :name, :string, null: false
       add :email, :citext, null: false
       add :confirmed?, :boolean, null: false
       add :admin?, :boolean, null: false, default: false

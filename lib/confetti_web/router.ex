@@ -26,14 +26,9 @@ defmodule ConfettiWeb.Router do
     get "/log-out", AuthController, :delete, as: "log_out"
   end
 
-  live_dashboard "/dashboard", metrics: ConfettiWeb.Telemetry
-
   forward "/graphql", Absinthe.Plug, schema: ConfettiWeb.Schema
 
   if Mix.env() == :dev do
-    forward "/graphql-playground", Absinthe.Plug.GraphiQL,
-      schema: ConfettiWeb.Schema,
-      interface: :playground
   end
 
   # Enables the Swoosh mailbox preview in development.
@@ -41,6 +36,12 @@ defmodule ConfettiWeb.Router do
   # Note that preview only shows emails that were sent by the same
   # node running the Phoenix server.
   if Mix.env() == :dev do
+    live_dashboard "/dashboard", metrics: ConfettiWeb.Telemetry
+
+    forward "/graphql-playground", Absinthe.Plug.GraphiQL,
+      schema: ConfettiWeb.Schema,
+      interface: :playground
+
     scope "/dev" do
       pipe_through [:fetch_session, :protect_from_forgery]
 

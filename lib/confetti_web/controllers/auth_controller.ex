@@ -4,22 +4,26 @@ defmodule ConfettiWeb.AuthController do
   """
   use ConfettiWeb, :controller
 
+  alias Confetti.User
+
   plug Ueberauth
+
+  @app_url Application.fetch_env!(:confetti, :app_url)
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case User.find_or_create(auth) do
       {:ok, user} ->
-        Logger.info("User authentication success:\n\t#{auth.uid}", ansi_color: :green)
+        Logger.info("User authentication success:\n\t#{auth.uid}")
         conn |> log_in(user)
-      {:error, _error} ->
-        Logger.info("User authentication succeeded:\n\t#{auth.uid}", ansi_color: :green)
-        conn |> redirect(to: "/?error=authentication_error")
+      {:error, error} ->
+        Logger.warn("User authentication failed:\n\t#{inspect(error)}")
+        conn |> redirect(external: @app_url <> "/?error=authentication_error")
     end
   end
 
   def callback(%{assigns: %{ueberauth_failure: fails}} = conn, _params) do
-    Logger.info("User authentication failure:\n\t#{fails}", ansi_color: :red)
-    conn |> redirect(to: "/?callback=error")
+    Logger.warn("User authentication failure:\n\t#{inspect(fails)}")
+    conn |> redirect(external: @app_url <> "/?callback=error")
   end
 
   def delete(conn, _params), do: log_out(conn)
@@ -29,13 +33,13 @@ defmodule ConfettiWeb.AuthController do
     |> assign(:current_user, user)
     |> renew_session()
     |> put_session("id", user.id)
-    |> redirect(to: "/?log-in=success")
+    |> redirect(external: @app_url <> "/home")
   end
 
   defp log_out(conn) do
     conn
     |> renew_session()
-    |> redirect(to: "/?log-out=success")
+    |> redirect(external: @app_url <> "/?log-out=success")
   end
 
   defp renew_session(conn) do

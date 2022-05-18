@@ -11,7 +11,7 @@ defmodule ConfettiWeb.Schema.UserTypes do
     field :name, non_null(:string)
     field :email, non_null(:string)
     field :confirmed, non_null(:boolean)
-    field :admin, non_null(:boolean)
+    field :is_admin, non_null(:boolean)
     field :current_party, :party
     field :last_login, :datetime
     field :settings, non_null(:settings)

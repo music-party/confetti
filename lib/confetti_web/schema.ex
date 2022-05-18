@@ -7,6 +7,7 @@ defmodule ConfettiWeb.Schema do
   alias ConfettiWeb.Schema
 
   import_types(Absinthe.Type.Custom)
+  import_types(Schema.ConnectionTypes)
   import_types(Schema.UserTypes)
   import_types(Schema.PartyTypes)
 

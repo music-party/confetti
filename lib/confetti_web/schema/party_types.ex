@@ -7,13 +7,17 @@ defmodule ConfettiWeb.Schema.PartyTypes do
   alias ConfettiWeb.Resolvers
 
   object :party do
-    field :id, non_null(:id)
-    field :name, non_null(:string)
     field :description, non_null(:string)
-    field :privacy, non_null(:privacy)
-    field :host, non_null(:user)
-    field :queue, non_null(list_of(non_null(:track)))
     field :history, non_null(list_of(non_null(:string)))
+    field :host, non_null(:user)
+    field :id, non_null(:id)
+    field :listeners, non_null(list_of(non_null(:user))) do
+      interface :connection
+    end
+    field :moderators, non_null(list_of(non_null(:user)))
+    field :name, non_null(:string)
+    field :privacy, non_null(:privacy)
+    field :queue, non_null(list_of(non_null(:track)))
     field :tags, non_null(list_of(non_null(:tag)))
   end
 

@@ -60,7 +60,7 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :confetti,
-  app_url: "http://localhost:3000/",
-  api_url: "http://localhost:4000/"
+  app_url: "http://localhost:3000",
+  api_url: "http://localhost:4000"
 
 import_config "dev.secret.exs"
